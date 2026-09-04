@@ -1,0 +1,496 @@
+/* ============================================================
+   Octova — Design System & Global Styles
+   ============================================================
+   Two themes: PULSE (electric comic-panel colour) and
+   NOIR (same bones, stripped to ink black & white).
+   Signature language: thick ink outlines, offset panel
+   shadows, halftone dot texture, diagonal speed-line
+   dividers, chromatic-glitch headline hover.
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root,
+  [data-theme='pulse'] {
+    /* ---- PULSE (electric comic colour) ---- */
+    --bg-primary: #F5F3ED;
+    --bg-surface: #FFFFFF;
+    --bg-surface-secondary: #ECE9E0;
+
+    --text-primary: #0A0A0F;
+    --text-muted: #4A4A52;
+    --text-dim: #82828C;
+
+    --ink: #0A0A0F;
+    --paper: #F5F3ED;
+
+    --accent-1: #FF2D78;   /* electric magenta */
+    --accent-2: #00C2D6;   /* cyan */
+    --accent-3: #6C1FFF;   /* violet */
+    --accent-pop: #FFD400; /* pop yellow */
+
+    --border-color: rgba(10, 10, 15, 0.14);
+    --border-color-hover: rgba(10, 10, 15, 0.35);
+    --border-color-active: rgba(10, 10, 15, 1);
+
+    --shadow-sm: 0 1px 3px rgba(10, 10, 15, 0.08);
+    --shadow-md: 0 4px 10px rgba(10, 10, 15, 0.12);
+    --shadow-lg: 0 8px 30px rgba(10, 10, 15, 0.18);
+    --brutalist-shadow: 6px 6px 0px var(--ink);
+    --panel-shadow: 7px 7px 0px var(--accent-1);
+
+    --halftone-color: rgba(10, 10, 15, 0.55);
+    --gradient-primary: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+
+    /* Legacy aliases used throughout components — kept so every
+       previously-invisible accent (undefined vars) now resolves */
+    --color-purple: var(--accent-3);
+    --color-cyan: var(--accent-2);
+    --color-orange: var(--accent-pop);
+    --color-green: #00A86B;
+    --color-indigo: var(--accent-3);
+    --glass-bg: var(--bg-surface);
+    --glass-bg-light: var(--bg-surface-secondary);
+    --glass-blur: 12px;
+    --gradient-creator: var(--gradient-primary);
+
+    /* Theme-invariant "spotlight" pairing — always dark bg + light text,
+       regardless of how --ink/--paper are assigned per theme */
+    --highlight-bg: #0A0A0F;
+    --highlight-text: #F5F3ED;
+    --highlight-text-muted: #C7C5BC;
+  }
+
+  [data-theme='noir'] {
+    /* ---- NOIR (ink black & white) ---- */
+    --bg-primary: #0A0A0A;
+    --bg-surface: #131313;
+    --bg-surface-secondary: #1E1E1E;
+
+    --text-primary: #FAFAFA;
+    --text-muted: #A6A6A6;
+    --text-dim: #6E6E6E;
+
+    --ink: #FAFAFA;
+    --paper: #0A0A0A;
+
+    --accent-1: #FFFFFF;
+    --accent-2: #C4C4C4;
+    --accent-3: #8C8C8C;
+    --accent-pop: #FFFFFF;
+
+    --border-color: rgba(250, 250, 250, 0.18);
+    --border-color-hover: rgba(250, 250, 250, 0.4);
+    --border-color-active: rgba(250, 250, 250, 1);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.85);
+    --brutalist-shadow: 6px 6px 0px var(--ink);
+    --panel-shadow: 7px 7px 0px var(--text-muted);
+
+    --halftone-color: rgba(250, 250, 250, 0.5);
+    --gradient-primary: linear-gradient(90deg, #FFFFFF, #8C8C8C);
+
+    --color-purple: var(--accent-3);
+    --color-cyan: var(--accent-2);
+    --color-orange: var(--accent-pop);
+    --color-green: var(--ink);
+    --color-indigo: var(--accent-3);
+    --glass-bg: var(--bg-surface);
+    --glass-bg-light: var(--bg-surface-secondary);
+    --glass-blur: 12px;
+    --gradient-creator: var(--gradient-primary);
+
+    --highlight-bg: #000000;
+    --highlight-text: #FFFFFF;
+    --highlight-text-muted: #B8B8B8;
+  }
+}
+
+:root {
+  /* ---- Radius ---- */
+  --radius-sm: 0px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* ---- Durations ---- */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+
+  /* ---- Content Width ---- */
+  --max-width: 1280px;
+}
+
+/* ============================================================
+   2. BASE STYLES
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-inter), 'Noto Sans Devanagari', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color var(--duration-normal), color var(--duration-normal);
+}
+
+/* Comic display face — headlines only, used with restraint */
+.font-display {
+  font-family: var(--font-anton), 'Arial Narrow Bold', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+/* ============================================================
+   3. TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 800;
+}
+
+/* Fallback classes from previous gradients */
+.text-gradient-primary,
+.text-gradient-creator {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hindi-text {
+  font-family: 'Noto Sans Devanagari', system-ui, sans-serif;
+}
+
+/* ============================================================
+   4. INK PANELS — signature comic-panel treatment
+   ============================================================ */
+.glass {
+  background: var(--bg-surface);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-md);
+  box-shadow: 5px 5px 0px var(--accent-1);
+}
+
+.glass-light {
+  background: var(--bg-surface-secondary);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-md);
+}
+
+.glass-card {
+  background: var(--bg-surface);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-md);
+  box-shadow: 5px 5px 0px var(--accent-1);
+  transition: transform var(--duration-fast), box-shadow var(--duration-fast);
+}
+
+.glass-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 9px 9px 0px var(--accent-1);
+}
+
+/* Halftone dot texture — the signature background element */
+.halftone-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--halftone-color) 1.4px, transparent 1.4px);
+  background-size: 16px 16px;
+  opacity: 0.16;
+}
+
+/* Diagonal speed-line section divider */
+.speed-divider {
+  position: relative;
+  height: 28px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ink);
+}
+.speed-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -35deg,
+    var(--paper) 0px,
+    var(--paper) 3px,
+    transparent 3px,
+    transparent 26px
+  );
+  opacity: 0.9;
+}
+
+/* Chromatic glitch hover — used sparingly on headline signature moments */
+.glitch-hover {
+  position: relative;
+  display: inline-block;
+}
+.glitch-hover:hover {
+  animation: glitch-shift 0.4s steps(2) 1;
+}
+[data-theme='pulse'] .glitch-hover:hover {
+  text-shadow: -2px 0 var(--accent-2), 2px 0 var(--accent-1);
+}
+[data-theme='noir'] .glitch-hover:hover {
+  text-shadow: -2px 0 rgba(250,250,250,0.5), 2px 0 rgba(250,250,250,0.5);
+}
+@keyframes glitch-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Comic sound-fx style badge/eyebrow accent */
+.comic-pop {
+  color: var(--accent-pop);
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+/* ============================================================
+   5. BUTTONS (Ink comic-panel)
+   ============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+  box-shadow: 5px 5px 0px var(--accent-1);
+}
+
+.btn-primary:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0px var(--accent-1);
+}
+
+.btn-primary:active {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0px var(--accent-1);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--paper);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+  box-shadow: 5px 5px 0px var(--accent-2);
+}
+
+.btn-secondary:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0px var(--accent-2);
+}
+
+.btn-secondary:active {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0px var(--accent-2);
+}
+
+/* ============================================================
+   6. NOISE & GRID TEXTURES
+   ============================================================ */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--border-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black, transparent);
+}
+
+/* REMOVED GLOW ORBS */
+.glow-orb { display: none; }
+.glow-purple, .glow-cyan { box-shadow: none; }
+
+/* ============================================================
+   8. 3D UTILITIES
+   ============================================================ */
+.perspective-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* ============================================================
+   9. KEYFRAME ANIMATIONS
+   ============================================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: 92%; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 20s linear infinite; }
+.float-delay-1 { animation-delay: 0s; }
+.float-delay-2 { animation-delay: 1s; }
+.float-delay-3 { animation-delay: 2s; }
+
+/* ============================================================
+   10. ACCESSIBILITY
+   ============================================================ */
+*:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  padding: 12px 24px;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  z-index: 10000;
+  font-weight: 700;
+  transition: top var(--duration-fast);
+}
+.skip-link:focus { top: 16px; }
+
+/* ============================================================
+   12. SECTION LAYOUT
+   ============================================================ */
+.section-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-padding {
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--paper);
+  border: 2px solid var(--ink);
+  background: var(--accent-1);
+  border-radius: var(--radius-full);
+}
+
+.section-title {
+  font-family: var(--font-anton), 'Arial Narrow Bold', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(2.1rem, 5vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1.02;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   13. FORM STYLES
+   ============================================================ */
+.form-input, .form-select {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: border-color var(--duration-fast);
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--text-primary);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
