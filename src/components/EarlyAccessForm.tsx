@@ -273,7 +273,7 @@ export default function EarlyAccessForm() {
 
           {/* Error message */}
           {formState === 'error' && (
-            <div style={{
+            <div role="alert" style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
@@ -326,7 +326,7 @@ export default function EarlyAccessForm() {
             gap: '6px',
           }}>
             <Shield size={12} />
-            We won&apos;t share your info. Unsubscribe anytime.
+            This signup is not connected yet; your details will not be sent.
           </p>
         </form>
 
